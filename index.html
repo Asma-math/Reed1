@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>تحدّي بطلات الساعة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--board:#1d4a3c;--board2:#2a6a55;--chalk:#f6f2e7;--yellow:#ffd95a;--pink:#ff9bb0;--sky:#8fd6ff;--wood:#9a6532;--ink:#1f2a37;--wall:#efe4cd}
+*{box-sizing:border-box;margin:0}
+html,body{min-height:100%}
+body{font-family:'Cairo',Tahoma,sans-serif;color:var(--ink);background:var(--wall) repeating-linear-gradient(90deg,transparent 0 58px,rgba(120,90,40,.08) 58px 60px);background-attachment:fixed;display:flex;flex-direction:column;min-height:100vh;overflow-x:hidden}
+.deco{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.deco span{position:absolute;opacity:.16;animation:float 10s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-14px) rotate(-8deg)}}
+main{flex:1;position:relative;z-index:1;display:flex;align-items:center;justify-content:center;padding:18px 12px}
+.screen{display:none;width:100%;max-width:700px;color:var(--chalk);text-align:center;padding:24px 18px 22px;border:14px solid var(--wood);border-radius:14px;background:radial-gradient(ellipse at 30% 15%,var(--board2),var(--board));box-shadow:inset 0 0 44px rgba(0,0,0,.5),0 12px 0 #6b4220,0 22px 30px rgba(0,0,0,.28)}
+.screen.on{display:block;animation:pop .4s ease-out}
+@keyframes pop{from{opacity:0;transform:translateY(12px)}}
+h1{font-family:'Cairo',Tahoma,sans-serif;font-size:clamp(2rem,8vw,3.1rem);font-weight:700;line-height:1.35;color:var(--yellow);text-decoration:underline wavy var(--pink) 3px;text-underline-offset:10px;font-weight:900}
+.slogan{font-size:1.2rem;font-weight:700;margin:12px 0}
+.tags{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:14px 0}
+.tags b{border:2px dashed var(--chalk);border-radius:8px;padding:3px 14px;font-size:.95rem}
+button{font-family:inherit;cursor:pointer;color:var(--ink)}
+.big{font-family:'Cairo',Tahoma,sans-serif;font-size:1.5rem;font-weight:700;background:var(--yellow);border:0;border-radius:8px;padding:10px 38px;box-shadow:0 6px 0 #b8901c;transform:rotate(-1.5deg);transition:transform .1s,box-shadow .1s;margin-top:12px}
+.big:hover{transform:rotate(0) translateY(-2px)}.big:active{transform:translateY(5px);box-shadow:0 1px 0 #b8901c}
+.big.alt{background:var(--sky);box-shadow:0 6px 0 #4a9bc4;transform:rotate(1.2deg)}
+.big.alt:active{box-shadow:0 1px 0 #4a9bc4}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px;font-weight:700;margin-bottom:10px;flex-wrap:wrap}
+.pill{border:2px dashed var(--chalk);color:var(--chalk);border-radius:8px;padding:2px 12px;font-size:.95rem}
+.bar{height:14px;border:2px solid var(--chalk);border-radius:4px;overflow:hidden;margin-bottom:14px}
+.bar i{display:block;height:100%;width:0;background:var(--yellow);transition:width .6s}
+.qtype{font-family:'Cairo',Tahoma,sans-serif;font-size:1.45rem;color:var(--sky);margin-bottom:6px}
+.clock{width:min(300px,72vw);margin:0 auto;display:block;filter:drop-shadow(0 10px 10px rgba(0,0,0,.5));animation:pop .4s}
+.legend{font-size:.85rem;margin:8px 0 12px;color:var(--chalk)}
+.legend s{text-decoration:none;display:inline-block;width:22px;height:8px;border-radius:4px;vertical-align:middle;margin:0 4px 0 2px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:8px 0}
+.opt{font-family:'Cairo',Tahoma,sans-serif;font-size:2rem;font-weight:700;background:#fffaf0;border:0;border-radius:6px;padding:8px;box-shadow:0 5px 0 rgba(0,0,0,.4);direction:ltr;transform:rotate(-1.2deg);transition:transform .1s,background .2s}
+.opt:nth-child(even){transform:rotate(1.2deg)}
+.opt:hover:not(:disabled){transform:rotate(0);background:#e8f4ff}.opt:active:not(:disabled){transform:translateY(4px);box-shadow:0 1px 0 rgba(0,0,0,.4)}
+.opt.ok{background:#b7f0cf}.opt.no{background:#ffc6cf;animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.tbox{display:inline-flex;direction:ltr;align-items:center;gap:6px;font-family:'Cairo',Tahoma,sans-serif;font-size:2.6rem;font-weight:700;color:var(--ink);background:#fffaf0;border-radius:10px;padding:8px 18px;margin:8px 0;box-shadow:0 6px 0 rgba(0,0,0,.4)}
+.tbox label{display:flex;flex-direction:column;font-family:'Cairo',Tahoma,sans-serif;font-size:.8rem;font-weight:700;direction:rtl}
+.tbox input{width:2.3em;font:inherit;text-align:center;border:0;border-bottom:3px dotted #e63946;background:transparent;color:var(--ink);outline:0;padding:0}
+.tbox input:focus{border-bottom-color:#1d6fd8;background:#eef6ff}
+.fb{min-height:3.2em;font-weight:700;font-size:1.15rem;margin:10px 0 2px;line-height:1.6}
+.fb.ok{color:#a8f5c8}.fb.no{color:#ffc0cb}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}
+.stats div{border:2px dashed var(--chalk);border-radius:8px;padding:8px 2px;font-weight:700;font-size:.95rem;background:rgba(255,255,255,.06)}
+.stats b{display:block;font-family:'Cairo',Tahoma,sans-serif;font-size:2rem;color:var(--yellow)}
+.score{font-family:'Cairo',Tahoma,sans-serif;font-size:3.6rem;font-weight:700;color:var(--yellow)}
+#sound{position:fixed;top:10px;left:10px;z-index:5;width:44px;height:44px;border-radius:50%;border:2px solid var(--chalk);background:var(--board);color:var(--chalk);font-size:1.2rem;box-shadow:0 3px 0 rgba(0,0,0,.4)}
+footer{position:relative;z-index:1;text-align:center;padding:14px 10px 18px;font-family:'Cairo',Tahoma,sans-serif;font-size:1.05rem;font-weight:600;line-height:1.6;color:#5b3d1a}
+footer b{display:block;font-size:1.3rem;font-weight:900;color:#8a3b12}
+#cf{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9}
+.burst{position:fixed;z-index:10;font-size:1.8rem;pointer-events:none;animation:up 1.1s ease-out forwards}
+@keyframes up{to{transform:translate(var(--dx),-130px) scale(1.4) rotate(40deg);opacity:0}}
+@media(max-width:420px){.tbox{font-size:2.1rem}.opt{font-size:1.6rem}.screen{padding:16px 10px;border-width:10px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+</head>
+<body>
+<div class="deco" id="deco"></div>
+<button id="sound" aria-label="الصوت">🔊</button>
+<canvas id="cf"></canvas>
+<main>
+  <section class="screen on" id="s-start">
+    <div style="max-width:210px;margin:0 auto" id="demo"></div>
+    <h1>تحدّي بطلات الساعة 🏆</h1>
+    <p class="slogan">هل تستطيعين قراءة الساعة دون مساعدة؟</p>
+    <p class="slogan">هيا نقرأ الساعة ونثبت مهارتنا!</p>
+    <div class="tags"><b>📘 المادة: الرياضيات</b><b>🎒 الصف الثالث الابتدائي</b></div>
+    <button class="big" id="go">ابدئي التحدّي</button>
+  </section>
+
+  <section class="screen" id="s-game">
+    <div class="top"><span class="pill" id="qn"></span><span class="pill" id="pts"></span><span class="pill" id="stars"></span></div>
+    <div class="bar"><i id="bar"></i></div>
+    <div id="q"></div>
+  </section>
+
+  <section class="screen" id="s-end">
+    <h1 id="endTitle">انتهى التحدّي!</h1>
+    <div class="score" id="endScore"></div>
+    <p class="slogan" id="endMsg"></p>
+    <div class="stats">
+      <div>✅ صحيحة<b id="eOk"></b></div>
+      <div>❌ خاطئة<b id="eNo"></b></div>
+      <div>⭐ نجوم<b id="eSt"></b></div>
+    </div>
+    <button class="big alt" id="again">العبي من جديد 🔄</button>
+  </section>
+</main>
+<footer>إعداد وتصميم معلمة الرياضيات<b>أسماء آل عثمان</b></footer>
+
+<script>
+const AD='٠١٢٣٤٥٦٧٨٩';
+const ar=n=>String(n).replace(/\d/g,d=>AD[d]);
+const norm=s=>s.replace(/[٠-٩]/g,d=>AD.indexOf(d)).replace(/[۰-۹]/g,d=>d.charCodeAt(0)-1776).trim();
+const fmt=(h,m)=>ar(h)+':'+ar(String(m).padStart(2,'0'));
+const $=id=>document.getElementById(id);
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const MINS=[0,15,30,45];
+const HN=['','الواحدة','الثانية','الثالثة','الرابعة','الخامسة','السادسة','السابعة','الثامنة','التاسعة','العاشرة','الحادية عشرة','الثانية عشرة'];
+function words(h,m){
+  if(m===0)return HN[h]+' تمامًا';
+  if(m===15)return HN[h]+' والربع';
+  if(m===30)return HN[h]+' والنصف';
+  return HN[h%12+1]+' إلا ربعًا';
+}
+
+/* ---------- الساعة ---------- */
+function clockSVG(h,m){
+  let t='';
+  for(let i=0;i<60;i++){const a=i*6*Math.PI/180,big=i%5===0,r1=big?84:88,r2=93;
+    t+=`<line x1="${100+r1*Math.sin(a)}" y1="${100-r1*Math.cos(a)}" x2="${100+r2*Math.sin(a)}" y2="${100-r2*Math.cos(a)}" stroke="#1f2a37" stroke-width="${big?3:1.2}" stroke-linecap="round"/>`}
+  for(let n=1;n<=12;n++){const a=n*30*Math.PI/180;
+    t+=`<text x="${100+68*Math.sin(a)}" y="${100-68*Math.cos(a)}" text-anchor="middle" dominant-baseline="central" font-size="19" font-weight="900" font-family="Cairo,Tahoma,sans-serif" fill="#1f2a37">${ar(n)}</text>`}
+  const ha=(h%12)*30+m*0.5, ma=m*6;
+  return `<svg class="clock" viewBox="0 0 200 200" role="img" aria-label="ساعة عقارب">
+  <circle cx="100" cy="100" r="97" fill="#1f2a37" stroke="#1f2a37" stroke-width="5"/>
+  <circle cx="100" cy="100" r="92" fill="#fffdf5"/>${t}
+  <line x1="100" y1="100" x2="100" y2="58" stroke="#e63946" stroke-width="9" stroke-linecap="round" transform="rotate(${ha} 100 100)"/>
+  <line x1="100" y1="100" x2="100" y2="30" stroke="#1d6fd8" stroke-width="5" stroke-linecap="round" transform="rotate(${ma} 100 100)"/>
+  <circle cx="100" cy="100" r="7" fill="#1f2a37"/><circle cx="100" cy="100" r="2.5" fill="#ffc533"/></svg>`;
+}
+const legend='<div class="legend"><s style="background:#e63946"></s>عقرب الساعات القصير &nbsp; <s style="background:#1d6fd8"></s>عقرب الدقائق الطويل</div>';
+
+/* ---------- الأسئلة ---------- */
+function buildQuestions(){
+  const mins=shuffle([...MINS,...MINS,...shuffle(MINS).slice(0,2)]);
+  const types=shuffle([...Array(5).fill('mc'),...Array(5).fill('wr')]);
+  const hours=shuffle([1,2,3,4,5,6,7,8,9,10,11,12]).slice(0,10);
+  return hours.map((h,i)=>{
+    const q={h,m:mins[i],type:types[i]};
+    if(q.type==='mc'){
+      const right=fmt(h,q.m),set=new Set([right]);
+      const pick=[
+        ()=>fmt(h,MINS[Math.floor(Math.random()*4)]),
+        ()=>fmt(1+Math.floor(Math.random()*12),q.m),
+        ()=>fmt(1+Math.floor(Math.random()*12),MINS[Math.floor(Math.random()*4)])];
+      let k=0;while(set.size<4){set.add(pick[Math.min(k++,2)]())}
+      q.opts=shuffle([...set]);q.right=right;
+    }
+    return q;
+  });
+}
+
+/* ---------- الصوت ---------- */
+let AC=null,soundOn=true;
+function tone(f,t,d,type='sine',v=.12){
+  if(!soundOn)return;
+  try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+    const o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.value=f;
+    g.gain.setValueAtTime(v,AC.currentTime+t);g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+t+d);
+    o.connect(g);g.connect(AC.destination);o.start(AC.currentTime+t);o.stop(AC.currentTime+t+d+.05)}catch(e){}
+}
+const sOk=()=>[523,659,784,1047].forEach((f,i)=>tone(f,i*.09,.25));
+const sNo=()=>{tone(300,0,.25,'triangle',.09);tone(240,.15,.3,'triangle',.09)};
+const sWin=()=>[523,659,784,659,784,1047].forEach((f,i)=>tone(f,i*.12,.3));
+$('sound').onclick=()=>{soundOn=!soundOn;$('sound').textContent=soundOn?'🔊':'🔇'};
+
+/* ---------- المؤثرات ---------- */
+const cv=$('cf'),cx=cv.getContext('2d');let parts=[],run=false;
+function fit(){cv.width=innerWidth;cv.height=innerHeight}fit();addEventListener('resize',fit);
+function confetti(n=90){
+  const cols=['#e63946','#ffc533','#22c997','#1d6fd8','#9b5de5'];
+  for(let i=0;i<n;i++)parts.push({x:innerWidth/2+(Math.random()-.5)*200,y:innerHeight*.45,vx:(Math.random()-.5)*14,vy:-Math.random()*13-3,s:5+Math.random()*7,r:Math.random()*6,vr:(Math.random()-.5)*.4,c:cols[i%5],l:130});
+  if(!run){run=true;requestAnimationFrame(loop)}
+}
+function loop(){
+  cx.clearRect(0,0,cv.width,cv.height);
+  parts=parts.filter(p=>p.l>0);
+  parts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.35;p.vx*=.99;p.r+=p.vr;p.l--;cx.save();cx.globalAlpha=Math.min(1,p.l/30);cx.translate(p.x,p.y);cx.rotate(p.r);cx.fillStyle=p.c;cx.fillRect(-p.s/2,-p.s/3,p.s,p.s*.6);cx.restore()});
+  if(parts.length)requestAnimationFrame(loop);else run=false;
+}
+function burst(el){
+  const r=el.getBoundingClientRect();
+  ['⭐','💖','✨','🌟','💫'].forEach((e,i)=>{const s=document.createElement('span');s.className='burst';s.textContent=e;
+    s.style.left=(r.left+r.width/2)+'px';s.style.top=(r.top+r.height/2)+'px';s.style.setProperty('--dx',((i-2)*34)+'px');
+    document.body.appendChild(s);setTimeout(()=>s.remove(),1200)});
+}
+(function(){const e=['✏️','📐','📏','🕒','📚','⭐','🖍️','🎒'],d=$('deco');
+  for(let i=0;i<16;i++){const s=document.createElement('span');s.textContent=e[i%e.length];
+    s.style.cssText=`left:${(i*37)%96}%;top:${(i*53)%92}%;font-size:${22+(i%4)*10}px;animation-delay:${-i*.7}s`;d.appendChild(s)}})();
+
+/* ---------- سير اللعبة ---------- */
+let qs=[],idx=0,ok=0,no=0,locked=false;
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));scrollTo(0,0)}
+function start(){qs=buildQuestions();idx=0;ok=0;no=0;show('s-game');render()}
+function head(){
+  $('qn').textContent='السؤال '+ar(idx+1)+' من '+ar(10);
+  $('pts').textContent='🎯 '+ar(ok*10)+' نقطة';
+  $('stars').textContent='⭐ '+ar(ok);
+  $('bar').style.width=(idx/10*100)+'%';
+}
+function render(){
+  locked=false;head();
+  const q=qs[idx];let h='';
+  if(q.type==='mc'){
+    h=`<div class="qtype">🔎 اختاري الإجابة الصحيحة</div>${clockSVG(q.h,q.m)}${legend}
+    <div class="opts">${q.opts.map(o=>`<button class="opt" data-v="${o}">${o}</button>`).join('')}</div>`;
+  }else{
+    h=`<div class="qtype">✏️ اكتبي الوقت</div>${clockSVG(q.h,q.m)}${legend}
+    <div><div class="tbox"><span>(</span>
+      <label>الساعة<input id="ih" inputmode="numeric" maxlength="2" autocomplete="off" placeholder="…"></label><span>:</span>
+      <label>الدقائق<input id="im" inputmode="numeric" maxlength="2" autocomplete="off" placeholder="…"></label><span>)</span></div></div>
+    <div><button class="big" id="chk" style="font-size:1.25rem;padding:8px 28px">تحقّق ✔️</button></div>`;
+  }
+  h+=`<div class="fb" id="fb"></div><div id="nx"></div>`;
+  $('q').innerHTML=h;$('q').firstElementChild.parentElement.classList.remove('on');
+  document.querySelector('#s-game').classList.remove('on');void $('s-game').offsetWidth;$('s-game').classList.add('on');
+  if(q.type==='mc')document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>answer(b.dataset.v===q.right,b));
+  else{const ih=$('ih'),im=$('im');
+    ih.oninput=()=>{if(norm(ih.value).length>=2)im.focus()};
+    [ih,im].forEach(i=>i.onkeydown=e=>{if(e.key==='Enter')check()});
+    $('chk').onclick=check;ih.focus({preventScroll:true});}
+}
+function check(){
+  if(locked)return;
+  const q=qs[idx],hv=norm($('ih').value),mv=norm($('im').value);
+  if(!hv||!mv){const f=$('fb');f.className='fb no';f.textContent='اكتبي الساعة والدقائق أولًا 😊';return}
+  const good=/^\d+$/.test(hv)&&/^\d+$/.test(mv)&&+hv===q.h&&+mv===q.m;
+  answer(good,$('chk'));
+}
+function answer(good,el){
+  if(locked)return;locked=true;
+  const q=qs[idx],f=$('fb');
+  document.querySelectorAll('.opt').forEach(b=>{b.disabled=true;if(b.dataset.v===q.right)b.classList.add('ok');else if(b===el)b.classList.add('no')});
+  if($('ih')){$('ih').disabled=true;$('im').disabled=true;$('chk').style.display='none'}
+  const ans=`<bdi dir="ltr">${fmt(q.h,q.m)}</bdi> (${words(q.h,q.m)})`;
+  if(good){ok++;f.className='fb ok';
+    f.innerHTML='🎉 أحسنتِ! إجابة صحيحة<br>'+ans;sOk();confetti(90);burst(el)}
+  else{no++;f.className='fb no';
+    f.innerHTML='لا بأس يا بطلة، المحاولة تصنع المهارة 💪<br>الإجابة الصحيحة: '+ans;sNo()}
+  $('pts').textContent='🎯 '+ar(ok*10)+' نقطة';$('stars').textContent='⭐ '+ar(ok);
+  $('bar').style.width=((idx+1)/10*100)+'%';
+  const last=idx===9;
+  $('nx').innerHTML=`<button class="big alt" id="nb" style="font-size:1.2rem;padding:8px 28px">${last?'عرض النتيجة 🏁':'السؤال التالي ➜'}</button>`;
+  $('nb').onclick=()=>{if(last)finish();else{idx++;render()}};
+  $('nb').focus({preventScroll:true});
+}
+function finish(){
+  show('s-end');
+  $('endScore').textContent=ar(ok)+' / '+ar(10);
+  $('eOk').textContent=ar(ok);$('eNo').textContent=ar(no);$('eSt').textContent=ar(ok);
+  const m=ok===10?['🏆 بطلة الساعة الحقيقية!','نتيجة كاملة! أنتِ تقرئين الساعة كالمحترفات 🌟']
+    :ok>=8?['🌟 رائع جدًا!','أداء مميز، خطوة صغيرة وتصلين إلى العلامة الكاملة!']
+    :ok>=5?['👏 جيد!','أنتِ في الطريق الصحيح، تدرّبي مرة أخرى وستتفوقين!']
+    :['💪 لا تستسلمي!','كل بطلة تبدأ بخطوة. أعيدي المحاولة وستتحسّنين بإذن الله!'];
+  $('endTitle').textContent=m[0];$('endMsg').textContent=m[1];
+  sWin();confetti(180);setTimeout(()=>confetti(120),500);
+}
+$('demo').innerHTML=clockSVG(3,0);
+$('go').onclick=start;$('again').onclick=start;
+</script>
+</body>
+</html>
